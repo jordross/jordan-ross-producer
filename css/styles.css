@@ -415,3 +415,18 @@ section { padding: 2.25rem 0 1rem; }
 @media (max-width: 520px) {
   .gallery { grid-template-columns: 1fr; }
 }
+
+
+.gallery-hero {
+  grid-template-columns: 1fr;
+}
+
+.gallery-hero .shot {
+  aspect-ratio: 21 / 9;
+}
+
+.shot-note {
+  margin: -0.55rem 0 1.1rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}

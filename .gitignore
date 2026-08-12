@@ -1,2 +1,4 @@
-.DS_Store
 *.log
+.DS_Store
+images/**/01.png
+images/swagflip/raw-*.jpg
