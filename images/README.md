@@ -1,0 +1,21 @@
+# Screenshots
+
+Drop 2–4 images per project (jpg/png/webp). Suggested names:
+
+- `swagflip/01.jpg` … `04.jpg`
+- `truedirt/01.jpg` … `04.jpg`
+- `freeride/01.jpg` … `04.jpg`
+
+Then in `index.html`, replace each placeholder like:
+
+```html
+<div class="shot">Add screenshot<br /><code>images/swagflip/01.jpg</code></div>
+```
+
+with:
+
+```html
+<div class="shot has-image"><img src="images/swagflip/01.jpg" alt="SWAGFLIP gameplay" /></div>
+```
+
+Tips: gameplay/in-engine stills beat splash art alone. Keep files under ~500KB each when you can.
