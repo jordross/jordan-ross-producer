@@ -220,26 +220,53 @@
       <span>Production case studies for studio applications</span>
     </div>
   </footer>
-  <dialog class="lightbox" id="lightbox" aria-label="Enlarged screenshot">
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Enlarged screenshot">
     <button type="button" class="lightbox-close" aria-label="Close">Close</button>
     <figure class="lightbox-frame">
       <img id="lightbox-photo" alt="" />
       <img id="lightbox-logo" class="shot-logo" alt="" hidden />
     </figure>
-  </dialog>
+  </div>
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
 
     (function () {
-      var dialog = document.getElementById("lightbox");
+      var overlay = document.getElementById("lightbox");
       var photo = document.getElementById("lightbox-photo");
       var logo = document.getElementById("lightbox-logo");
-      var closeBtn = dialog.querySelector(".lightbox-close");
+      var closeBtn = overlay.querySelector(".lightbox-close");
+      var lastShot = null;
+      var scrollX = 0;
+      var scrollY = 0;
+
+      function lockScroll() {
+        scrollX = window.scrollX;
+        scrollY = window.scrollY;
+        document.body.classList.add("lightbox-open");
+        document.body.style.top = "-" + scrollY + "px";
+      }
+
+      function unlockScroll() {
+        document.body.classList.remove("lightbox-open");
+        document.body.style.top = "";
+        window.scrollTo(scrollX, scrollY);
+      }
+
+      function closeLightbox() {
+        if (overlay.hidden) return;
+        overlay.hidden = true;
+        photo.removeAttribute("src");
+        logo.removeAttribute("src");
+        logo.hidden = true;
+        unlockScroll();
+        if (lastShot) lastShot.focus();
+      }
 
       function openShot(shot) {
         var img = shot.querySelector("img:first-of-type");
         var mark = shot.querySelector(".shot-logo");
         if (!img) return;
+        lastShot = shot;
         photo.src = img.currentSrc || img.src;
         photo.alt = shot.getAttribute("aria-label") || "";
         if (mark) {
@@ -249,27 +276,26 @@
           logo.removeAttribute("src");
           logo.hidden = true;
         }
-        if (typeof dialog.showModal === "function") dialog.showModal();
+        lockScroll();
+        overlay.hidden = false;
+        closeBtn.focus();
       }
 
       document.querySelectorAll(".shot.has-image").forEach(function (shot) {
-        shot.addEventListener("click", function () {
+        shot.addEventListener("click", function (event) {
+          event.preventDefault();
           openShot(shot);
         });
       });
 
-      closeBtn.addEventListener("click", function () {
-        dialog.close();
+      closeBtn.addEventListener("click", closeLightbox);
+
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closeLightbox();
       });
 
-      dialog.addEventListener("click", function (event) {
-        if (event.target === dialog) dialog.close();
-      });
-
-      dialog.addEventListener("close", function () {
-        photo.removeAttribute("src");
-        logo.removeAttribute("src");
-        logo.hidden = true;
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeLightbox();
       });
     })();
   </script>
