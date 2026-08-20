@@ -58,8 +58,12 @@
           <p class="project-sub">Producer &amp; Developer · JR Studios · Mobile</p>
 
           <div class="gallery gallery-phone" aria-label="SWAGFLIP screenshots">
-            <div class="shot has-image"><img src="images/swagflip/01.jpg" alt="SWAGFLIP parkour backflip off water tower" /></div>
-            <div class="shot has-image"><img src="images/swagflip/02.jpg" alt="SWAGFLIP sunset barrel-stack flip" /></div>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: SWAGFLIP parkour backflip off water tower">
+              <img src="images/swagflip/01.jpg" alt="" />
+            </button>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: SWAGFLIP sunset barrel-stack flip">
+              <img src="images/swagflip/02.jpg" alt="" />
+            </button>
           </div>
 
           <dl class="meta-grid">
@@ -97,7 +101,9 @@
           <p class="project-sub">Producer &amp; Developer · JR Studios · Unity</p>
 
           <div class="gallery gallery-hero" aria-label="True Dirt screenshots">
-            <div class="shot has-image"><img src="images/truedirt/01.jpg" alt="True Dirt offroad concept still — illustrative mock" /></div>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: True Dirt offroad concept still">
+              <img src="images/truedirt/01.jpg" alt="" />
+            </button>
           </div>
           <p class="shot-note">Illustrative concept still (in-engine capture coming).</p>
 
@@ -133,14 +139,14 @@
           <p class="project-sub">Producer &amp; Developer · JR Studios · Unity → Steam MVP</p>
 
           <div class="gallery gallery-pair" aria-label="Freeride MTB screenshots">
-            <div class="shot has-image">
-              <img src="images/freeride/01.jpg" alt="Freeride MTB in-engine still — inverted jump on a red bike" />
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: Freeride MTB inverted jump">
+              <img src="images/freeride/01.jpg" alt="" />
               <img class="shot-logo" src="images/freeride/logo.png" alt="" />
-            </div>
-            <div class="shot has-image">
-              <img src="images/freeride/02.jpg" alt="Freeride MTB in-engine still — mid-air whip over a dirt lip" />
+            </button>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: Freeride MTB mid-air whip">
+              <img src="images/freeride/02.jpg" alt="" />
               <img class="shot-logo" src="images/freeride/logo.png" alt="" />
-            </div>
+            </button>
           </div>
 
           <dl class="meta-grid">
@@ -214,8 +220,58 @@
       <span>Production case studies for studio applications</span>
     </div>
   </footer>
+  <dialog class="lightbox" id="lightbox" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">Close</button>
+    <figure class="lightbox-frame">
+      <img id="lightbox-photo" alt="" />
+      <img id="lightbox-logo" class="shot-logo" alt="" hidden />
+    </figure>
+  </dialog>
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
+
+    (function () {
+      var dialog = document.getElementById("lightbox");
+      var photo = document.getElementById("lightbox-photo");
+      var logo = document.getElementById("lightbox-logo");
+      var closeBtn = dialog.querySelector(".lightbox-close");
+
+      function openShot(shot) {
+        var img = shot.querySelector("img:first-of-type");
+        var mark = shot.querySelector(".shot-logo");
+        if (!img) return;
+        photo.src = img.currentSrc || img.src;
+        photo.alt = shot.getAttribute("aria-label") || "";
+        if (mark) {
+          logo.src = mark.currentSrc || mark.src;
+          logo.hidden = false;
+        } else {
+          logo.removeAttribute("src");
+          logo.hidden = true;
+        }
+        if (typeof dialog.showModal === "function") dialog.showModal();
+      }
+
+      document.querySelectorAll(".shot.has-image").forEach(function (shot) {
+        shot.addEventListener("click", function () {
+          openShot(shot);
+        });
+      });
+
+      closeBtn.addEventListener("click", function () {
+        dialog.close();
+      });
+
+      dialog.addEventListener("click", function (event) {
+        if (event.target === dialog) dialog.close();
+      });
+
+      dialog.addEventListener("close", function () {
+        photo.removeAttribute("src");
+        logo.removeAttribute("src");
+        logo.hidden = true;
+      });
+    })();
   </script>
 </body>
 </html>
