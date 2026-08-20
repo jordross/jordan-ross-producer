@@ -58,8 +58,12 @@
           <p class="project-sub">Producer &amp; Developer · JR Studios · Mobile</p>
 
           <div class="gallery gallery-phone" aria-label="SWAGFLIP screenshots">
-            <div class="shot has-image"><img src="images/swagflip/01.jpg" alt="SWAGFLIP parkour backflip off water tower" /></div>
-            <div class="shot has-image"><img src="images/swagflip/02.jpg" alt="SWAGFLIP sunset barrel-stack flip" /></div>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: SWAGFLIP parkour backflip off water tower">
+              <img src="images/swagflip/01.jpg" alt="" />
+            </button>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: SWAGFLIP sunset barrel-stack flip">
+              <img src="images/swagflip/02.jpg" alt="" />
+            </button>
           </div>
 
           <dl class="meta-grid">
@@ -97,9 +101,18 @@
           <p class="project-sub">Producer &amp; Developer · JR Studios · Unity</p>
 
           <div class="gallery gallery-hero" aria-label="True Dirt screenshots">
-            <div class="shot has-image"><img src="images/truedirt/01.jpg" alt="True Dirt offroad concept still — illustrative mock" /></div>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: True Dirt in-engine still — four trucks on a hillside track">
+              <img src="images/truedirt/01.jpg" alt="" />
+            </button>
           </div>
-          <p class="shot-note">Illustrative concept still (in-engine capture coming).</p>
+          <div class="gallery gallery-pair" aria-label="True Dirt garage and race stills">
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: True Dirt race — trucks on a mountain course">
+              <img src="images/truedirt/02.jpg" alt="" />
+            </button>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: True Dirt garage — 2012 Bull Rancher customization">
+              <img src="images/truedirt/03.jpg" alt="" />
+            </button>
+          </div>
 
           <dl class="meta-grid">
             <div class="meta-item"><dt>Focus</dt><dd>Procedural truck destruction</dd></div>
@@ -132,11 +145,15 @@
           </div>
           <p class="project-sub">Producer &amp; Developer · JR Studios · Unity → Steam MVP</p>
 
-          <div class="gallery" aria-label="Freeride MTB screenshots">
-            <div class="shot has-image"><img src="images/freeride/01.jpg" alt="Freeride MTB meadow trail environment" /></div>
-            <div class="shot has-image"><img src="images/freeride/02.jpg" alt="Freeride MTB forest path environment" /></div>
-            <div class="shot has-image"><img src="images/freeride/03.jpg" alt="Freeride MTB pine clearing environment" /></div>
-            <div class="shot has-image"><img src="images/freeride/04.jpg" alt="Freeride MTB title treatment over environment" /></div>
+          <div class="gallery gallery-pair" aria-label="Freeride MTB screenshots">
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: Freeride MTB inverted jump">
+              <img src="images/freeride/01.jpg" alt="" />
+              <img class="shot-logo" src="images/freeride/logo.png" alt="" />
+            </button>
+            <button type="button" class="shot has-image" aria-haspopup="dialog" aria-label="Enlarge: Freeride MTB mid-air whip">
+              <img src="images/freeride/02.jpg" alt="" />
+              <img class="shot-logo" src="images/freeride/logo.png" alt="" />
+            </button>
           </div>
 
           <dl class="meta-grid">
@@ -210,8 +227,84 @@
       <span>Production case studies for studio applications</span>
     </div>
   </footer>
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox-close" aria-label="Close">Close</button>
+    <figure class="lightbox-frame">
+      <img id="lightbox-photo" alt="" />
+      <img id="lightbox-logo" class="shot-logo" alt="" hidden />
+    </figure>
+  </div>
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
+
+    (function () {
+      var overlay = document.getElementById("lightbox");
+      var photo = document.getElementById("lightbox-photo");
+      var logo = document.getElementById("lightbox-logo");
+      var closeBtn = overlay.querySelector(".lightbox-close");
+      var lastShot = null;
+      var scrollX = 0;
+      var scrollY = 0;
+
+      function lockScroll() {
+        scrollX = window.scrollX;
+        scrollY = window.scrollY;
+        document.body.classList.add("lightbox-open");
+        document.body.style.top = "-" + scrollY + "px";
+      }
+
+      function unlockScroll() {
+        document.body.classList.remove("lightbox-open");
+        document.body.style.top = "";
+        window.scrollTo(scrollX, scrollY);
+      }
+
+      function closeLightbox() {
+        if (overlay.hidden) return;
+        overlay.hidden = true;
+        photo.removeAttribute("src");
+        logo.removeAttribute("src");
+        logo.hidden = true;
+        unlockScroll();
+        if (lastShot) lastShot.focus();
+      }
+
+      function openShot(shot) {
+        var img = shot.querySelector("img:first-of-type");
+        var mark = shot.querySelector(".shot-logo");
+        if (!img) return;
+        lastShot = shot;
+        photo.src = img.currentSrc || img.src;
+        photo.alt = shot.getAttribute("aria-label") || "";
+        if (mark) {
+          logo.src = mark.currentSrc || mark.src;
+          logo.hidden = false;
+        } else {
+          logo.removeAttribute("src");
+          logo.hidden = true;
+        }
+        lockScroll();
+        overlay.hidden = false;
+        closeBtn.focus();
+      }
+
+      document.querySelectorAll(".shot.has-image").forEach(function (shot) {
+        shot.addEventListener("click", function (event) {
+          event.preventDefault();
+          openShot(shot);
+        });
+      });
+
+      closeBtn.addEventListener("click", closeLightbox);
+
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closeLightbox();
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeLightbox();
+      });
+    })();
   </script>
 </body>
 </html>
