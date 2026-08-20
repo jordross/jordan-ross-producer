@@ -484,6 +484,7 @@ button.shot.has-image {
 }
 
 .lightbox {
+  position: relative;
   border: 0;
   padding: 1.5rem 1.25rem 1.25rem;
   background: transparent;
