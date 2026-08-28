@@ -149,6 +149,7 @@
             <video
               controls
               playsinline
+              muted
               preload="metadata"
               poster="images/freeride/gameplay-poster.jpg"
               width="1280"
@@ -320,6 +321,19 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") closeLightbox();
+      });
+    })();
+
+    (function () {
+      document.querySelectorAll(".video-frame video").forEach(function (video) {
+        function keepMuted() {
+          video.muted = true;
+          video.defaultMuted = true;
+          video.volume = 0;
+        }
+        keepMuted();
+        video.addEventListener("play", keepMuted);
+        video.addEventListener("volumechange", keepMuted);
       });
     })();
   </script>
