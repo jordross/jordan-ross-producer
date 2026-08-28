@@ -2,9 +2,9 @@
 
 Drop 2–4 images per project (jpg/png/webp). Suggested names:
 
-- `swagflip/01.jpg` … `04.jpg`
-- `truedirt/01.jpg` … `04.jpg`
-- `freeride/01.jpg` … `04.jpg`
+- `swagflip/01.jpg` … `02.jpg`
+- `truedirt/01.jpg` … `03.jpg`
+- `freeride/01.jpg` … `02.jpg` plus `logo.png`
 - `freeride/gameplay.mp4` + `gameplay-poster.jpg` (in-engine clip)
 
 Then in `index.html`, replace each placeholder like:
