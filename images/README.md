@@ -5,6 +5,7 @@ Drop 2–4 images per project (jpg/png/webp). Suggested names:
 - `swagflip/01.jpg` … `04.jpg`
 - `truedirt/01.jpg` … `04.jpg`
 - `freeride/01.jpg` … `04.jpg`
+- `freeride/gameplay.mp4` + `gameplay-poster.jpg` (in-engine clip)
 
 Then in `index.html`, replace each placeholder like:
 
@@ -18,4 +19,4 @@ with:
 <div class="shot has-image"><img src="images/swagflip/01.jpg" alt="SWAGFLIP gameplay" /></div>
 ```
 
-Tips: gameplay/in-engine stills beat splash art alone. Keep files under ~500KB each when you can.
+Tips: gameplay/in-engine stills beat splash art alone. Keep stills under ~500KB each when you can. The Freeride clip is a compressed web MP4.

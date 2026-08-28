@@ -11,7 +11,7 @@ See `images/README.md`. Put files in:
 - `images/truedirt/`
 - `images/freeride/`
 
-Then swap the gray placeholders in `index.html` for `<img>` tags (examples in that README).
+Then swap the gray placeholders in `index.html` for `<img>` tags (examples in that README). Freeride also has an in-engine `gameplay.mp4` clip on the case study.
 
 ## 2) Preview locally
 
